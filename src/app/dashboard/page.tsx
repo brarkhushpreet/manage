@@ -9,23 +9,29 @@ const Dashboard = async () => {
     const user = await currentProfile();
 
     if (!user) {
-      return redirect("/login");
+      redirect("/login");
     }
 
     switch (user.role) {
       case Role.TEACHER:
-        return redirect("/dashboard/teacher");
+        redirect("/dashboard/teacher");
       case Role.STUDENT:
-        return redirect("/dashboard/student");
+        redirect("/dashboard/student");
       case Role.ADMIN:
-        return redirect("/admin_dashboard");
+        redirect("/admin_dashboard");
       default:
-        return redirect("/error");
+        redirect("/error");
     }
   } catch (error) {
-    console.error("Error in Dashboard:", error);
-    return redirect("/error");
+    if (error instanceof Error && error.message !== 'NEXT_REDIRECT') {
+      console.error("Error in Dashboard:", error);
+      redirect("/error");
+    }
+    throw error; // Re-throw the redirect "error" so Next.js can handle it
   }
+
+  // This point should never be reached due to the redirects above
+  return null;
 };
 
 export default Dashboard;
