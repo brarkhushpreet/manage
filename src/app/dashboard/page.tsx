@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 
 const Dashboard = async () => {
-  try {
+  
     const user = await currentProfile();
 
     if (!user) {
@@ -13,7 +13,7 @@ const Dashboard = async () => {
    
 
     if(user){
-      <h1>{`hello there, welcome ${user.username}`}</h1>
+     return  <h1>{`hello there, welcome ${user.username}`}</h1>
     }
     // switch (user.role) {
     //   case Role.TEACHER:
@@ -25,16 +25,8 @@ const Dashboard = async () => {
     //   default:
     //     redirect("/error");
     // }
-  } catch (error) {
-    if (error instanceof Error && error.message !== 'NEXT_REDIRECT') {
-      console.error("Error in Dashboard:", error);
-      redirect("/error");
-    }
-    throw error; // Re-throw the redirect "error" so Next.js can handle it
-  }
-
-  // This point should never be reached due to the redirects above
-  return null;
+  
+  
 };
 
 export default Dashboard;
