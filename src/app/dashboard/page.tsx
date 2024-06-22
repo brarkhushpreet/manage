@@ -10,17 +10,21 @@ const Dashboard = async () => {
     if (!user) {
       redirect("/login");
     }
+   
 
-    switch (user.role) {
-      case Role.TEACHER:
-        redirect("/dashboard/teacher");
-      case Role.STUDENT:
-        redirect("/dashboard/student");
-      case Role.ADMIN:
-        redirect("/admin_dashboard");
-      default:
-        redirect("/error");
+    if(user){
+      <h1>{`hello there, welcome ${user.username}`}</h1>
     }
+    // switch (user.role) {
+    //   case Role.TEACHER:
+    //     redirect("/dashboard/teacher");
+    //   case Role.STUDENT:
+    //     redirect("/dashboard/student");
+    //   case Role.ADMIN:
+    //     redirect("/admin_dashboard");
+    //   default:
+    //     redirect("/error");
+    // }
   } catch (error) {
     if (error instanceof Error && error.message !== 'NEXT_REDIRECT') {
       console.error("Error in Dashboard:", error);
