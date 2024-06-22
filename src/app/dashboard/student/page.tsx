@@ -6,6 +6,8 @@ import { currentProfile } from "@/lib/currentProfile";
 import { Role } from "@prisma/client";
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 const StudentPage = async () => {
   const student = await currentProfile();
   const username = student?.username;

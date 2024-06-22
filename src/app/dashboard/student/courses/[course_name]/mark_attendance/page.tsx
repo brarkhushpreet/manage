@@ -6,6 +6,8 @@ import { currentProfile } from "@/lib/currentProfile";
 import { redirect } from "next/navigation";
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 async function AttendanceMarker({ data }: { data: string }) {
   const result = await markAttendance(data);
 
