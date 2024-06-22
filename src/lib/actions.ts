@@ -128,7 +128,7 @@ export const signup = async (values: z.infer<typeof FormSchema>,path:string) => 
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: url,
     });
   } catch (error) {
     if (error instanceof AuthError) {

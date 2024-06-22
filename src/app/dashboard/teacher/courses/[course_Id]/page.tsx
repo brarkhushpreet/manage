@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import GenerateQRCodeComponent from "@/components/dashboard/generate_qr_code";
 import StudentCard from "@/components/dashboard/student_card";
 import {  getStudentsByTeacherAndCourse } from "@/lib/actions";
@@ -19,7 +21,6 @@ type Props={
 
 const TeacherPage = async ({params:{course_Id}}:Props) => {
   const teacher = await currentProfile();
-   const url = `http://localhost:3000/dashboard/student/courses/${course_Id}/mark_attendance`;
    
  
 

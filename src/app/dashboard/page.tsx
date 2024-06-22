@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { currentProfile } from "@/lib/currentProfile";
 import { Role } from "@prisma/client";
 import { redirect } from "next/navigation";
