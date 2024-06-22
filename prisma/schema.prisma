@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(STUDENT)
+  username  String
+  student   Student?
+  teacher   Teacher?
+  admin     Admin?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Student {
+  id        String             @id @default(uuid())
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String             @unique
+  branch    String
+  registrationNumber String    @unique
+  courses   Course[]           @relation("StudentCourses")
+  attendanceRecords AttendanceRecord[]
+  enrollments Enrollment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Teacher {
+  id        String             @id @default(uuid())
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String             @unique
+  department String
+  courses   Course[]           @relation("TeacherCourses")
+  attendanceRecords AttendanceRecord[]
+  enrollments Enrollment[]
+  qrCodes   QRCode[]           @relation("TeacherQRCodes")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Course {
+  id              String             @id @default(uuid())
+  name            String
+  code            String             @unique
+  session         String
+  department      String
+  teachers        Teacher[]          @relation("TeacherCourses")
+  students        Student[]          @relation("StudentCourses")
+  attendanceRecords AttendanceRecord[]
+  enrollments Enrollment[]
+  qrCodes   QRCode[]           @relation("CourseQRCodes")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model AttendanceRecord {
+  id        String            @id @default(uuid())
+  student   Student           @relation(fields: [studentId], references: [id])
+  studentId String
+  course    Course            @relation(fields: [courseId], references: [id])
+  courseId  String
+  date      DateTime          @default(now())
+  status    AttendanceStatus  @default(PRESENT)
+  session   String
+  teacher   Teacher           @relation(fields: [teacherId], references: [id])
+  teacherId String
+  qrCode    QRCode            @relation(fields: [qrCodeId], references: [id])
+  qrCodeId  String            @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model QRCode {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  attendanceRecords AttendanceRecord[]
+  teacherId String
+  courseId  String
+  teacher   Teacher  @relation("TeacherQRCodes", fields: [teacherId], references: [id])
+  course    Course   @relation("CourseQRCodes", fields: [courseId], references: [id])
+  expiresAt DateTime // Add this line
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+}
