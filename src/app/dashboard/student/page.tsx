@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import CourseCard from "@/components/dashboard/course_card";
 import { getEnrolledCourses } from "@/lib/actions";
 import { currentProfile } from "@/lib/currentProfile";

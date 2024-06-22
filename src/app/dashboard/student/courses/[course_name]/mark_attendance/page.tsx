@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import ErrorComponent from "@/components/dashboard/mark_attendence/attendence_error";
 import LoadingComponent from "@/components/dashboard/mark_attendence/attendence_loading";
 import SuccessComponent from "@/components/dashboard/mark_attendence/attendence_success";
