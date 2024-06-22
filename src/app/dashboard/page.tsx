@@ -1,23 +1,32 @@
-import { Button } from "@/components/ui/button";
-import { signOut } from "@/lib/auth"
 import { currentProfile } from "@/lib/currentProfile";
 import { Role } from "@prisma/client";
 import { redirect } from "next/navigation";
 
+const Dashboard = async () => {
+  try {
+    const user = await currentProfile();
 
-const Dashboard =async () => {
-  const user= await currentProfile();
+    if (!user) {
+      // Handle case where user is not found
+      return redirect("/login"); // or wherever you want to redirect unauthenticated users
+    }
 
-
-  if(user?.role===Role.TEACHER){
-    return redirect("/dashboard/teacher")
+    switch (user.role) {
+      case Role.TEACHER:
+        return redirect("/dashboard/teacher");
+      case Role.STUDENT:
+        return redirect("/dashboard/student");
+      case Role.ADMIN:
+        return redirect("/admin_dashboard");
+      default:
+        // Handle unexpected role
+        return redirect("/error"); // or some default page
+    }
+  } catch (error) {
+    console.error("Error in Dashboard:", error);
+    // Handle error - you might want to redirect to an error page or show an error message
+    return redirect("/error");
   }
-  if(user?.role===Role.STUDENT){
-    return redirect("/dashboard/student");
-  }  
-  if(user?.role===Role.ADMIN){
-    return redirect("/admin_dashboard");
-  }
- 
-}
+};
+
 export default Dashboard;
