@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { db } from "./db";
 
 import { signIn } from "./auth";
-import { DEFAULT_LOGIN_REDIRECT,DEFAULT_ADMIN_LOGIN_REDIRECT } from "@/routes";
+import { DEFAULT_LOGIN_REDIRECT,DEFAULT_ADMIN_LOGIN_REDIRECT, DEFAULT_TEACHER_LOGIN_REDIRECT, DEFAULT_STUDENT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { AssignCourseToTeacherSchema, FormSchema, LoginSchema } from "./Schema";
 import { AttendanceStatus, Role } from "@prisma/client";
@@ -35,6 +35,10 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
     if(role===Role.ADMIN){
        url=DEFAULT_ADMIN_LOGIN_REDIRECT;
+    } else if(role===Role.TEACHER){
+      url=DEFAULT_TEACHER_LOGIN_REDIRECT;
+    } else{
+      url=DEFAULT_STUDENT_LOGIN_REDIRECT;
     }
     await signIn("credentials", {
       email,
@@ -110,9 +114,17 @@ export const signup = async (values: z.infer<typeof FormSchema>,path:string) => 
   } else if (role === "ADMIN") {
     return  {error:"you are not authorized to register as an admin"}
   }
-  //login in user after sign up
+  //login in user after sign 
+  let url=DEFAULT_LOGIN_REDIRECT;
   if(path.includes("auth")){
       try {
+        if(newUser.role===Role.ADMIN){
+          url=DEFAULT_ADMIN_LOGIN_REDIRECT;
+       } else if(role===Role.TEACHER){
+         url=DEFAULT_TEACHER_LOGIN_REDIRECT;
+       } else{
+         url=DEFAULT_STUDENT_LOGIN_REDIRECT;
+       }
     await signIn("credentials", {
       email,
       password,
