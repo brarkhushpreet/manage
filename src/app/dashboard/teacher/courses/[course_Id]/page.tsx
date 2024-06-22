@@ -46,7 +46,7 @@ const TeacherPage = async ({params:{course_Id}}:Props) => {
       {isStudentsResponse(studentsResponse) && (
         <div className=" w-full grid grid-cols-1 gap-2 sm:grid-cols-1 md:grid-cols-2  xl:grid-cols-3">
           {studentsResponse.students.map((student) => (
-             <div key={student.id} className="col-span-1">
+             <div key={student.email} className="col-span-1">
             <StudentCard key={student.username} student={student} />
             </div>
           ))}
