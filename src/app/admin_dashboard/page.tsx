@@ -3,6 +3,7 @@ import Analytics from "@/components/admin_dashboard/Analytics"
 import { currentProfile } from "@/lib/currentProfile"
 import { Role } from "@prisma/client";
 import { redirect } from "next/navigation";
+export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
   const profile= await currentProfile();
