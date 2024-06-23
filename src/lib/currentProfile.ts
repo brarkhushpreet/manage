@@ -40,12 +40,8 @@ export const currentProfile = async () => {
             return null;
         }
 
-        return {
-            ...profile,
-            studentId: profile.student?.id,
-            teacherId: profile.teacher?.id,
-            adminId: profile.admin?.id
-        };
+        return profile;
+            
     } catch (error) {
         console.error("Error in currentProfile:", error);
         return null;
